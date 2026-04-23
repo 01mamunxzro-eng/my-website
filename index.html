@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,61 +6,26 @@
     <title>Premium Restaurant & Design Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-gold: #d4af37;
-            --dark-bg: #111111;
-            --card-bg: #1a1a1a;
-            --text-light: #f4f4f4;
-        }
-
+        :root { --primary-gold: #d4af37; --dark-bg: #111111; --card-bg: #1a1a1a; --text-light: #f4f4f4; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
-
         body { background-color: var(--dark-bg); color: var(--text-light); }
-
-        /* Navigation */
-        nav { background: rgba(0,0,0,0.9); padding: 20px; display: flex; justify-content: space-around; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--primary-gold); }
-        nav a { color: var(--text-light); text-decoration: none; font-weight: 600; font-size: 14px; text-transform: uppercase; transition: 0.3s; }
-        nav a:hover { color: var(--primary-gold); }
-
-        /* Hero Section */
-        .hero { height: 90vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop'); 
-                background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-        .hero h1 { font-size: 3rem; color: var(--primary-gold); margin-bottom: 15px; }
-        .hero p { font-size: 1.1rem; max-width: 700px; margin-bottom: 30px; line-height: 1.6; }
-        .btn-group { display: flex; gap: 20px; }
-        .btn { padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer; border: none; }
-        .btn-gold { background: var(--primary-gold); color: black; }
-        .btn-outline { border: 2px solid var(--primary-gold); color: var(--primary-gold); background: transparent; }
-        .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--primary-gold); }
-
-        /* Menu Section */
-        section { padding: 80px 10%; text-align: center; }
-        h2 { color: var(--primary-gold); font-size: 2.5rem; margin-bottom: 40px; text-transform: uppercase; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .card { background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid #333; transition: 0.3s; }
-        .card:hover { border-color: var(--primary-gold); }
-        .price { color: var(--primary-gold); font-size: 1.5rem; font-weight: bold; margin-top: 10px; display: block; }
-
-        /* Portfolio */
-        .portfolio-list { text-align: left; max-width: 600px; margin: 0 auto; list-style: none; }
-        .portfolio-list li { margin-bottom: 15px; font-size: 1.2rem; }
-        .portfolio-list li::before { content: '👉 '; }
-
-        /* Chat Assistant UI */
-        #chat-widget { position: fixed; bottom: 30px; right: 30px; width: 360px; height: 550px; background: white; border-radius: 20px; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 9999; border: 2px solid var(--primary-gold); }
-        #chat-header { background: var(--dark-bg); color: var(--primary-gold); padding: 20px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-        #chat-body { flex: 1; padding: 20px; overflow-y: auto; color: #333; display: flex; flex-direction: column; gap: 10px; background: #f9f9f9; }
-        .bot-msg, .user-msg { padding: 12px 16px; border-radius: 15px; font-size: 14px; max-width: 85%; line-height: 1.4; }
-        .bot-msg { background: #eee; align-self: flex-start; border-bottom-left-radius: 2px; }
-        .user-msg { background: var(--primary-gold); color: black; align-self: flex-end; border-bottom-right-radius: 2px; }
-        #chat-input-container { display: flex; padding: 15px; border-top: 1px solid #ddd; background: white; }
-        #chat-input { flex: 1; border: none; outline: none; padding: 5px; font-size: 14px; }
-        #chat-trigger { position: fixed; bottom: 30px; right: 30px; background: var(--primary-gold); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 10000; }
-
-        /* Contact Details */
-        .contact-info p { margin: 10px 0; font-size: 1.1rem; }
-
-        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } #chat-widget { width: 90%; right: 5%; } }
+        nav { background: rgba(0,0,0,0.9); padding: 15px; display: flex; justify-content: space-around; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--primary-gold); }
+        nav a { color: var(--text-light); text-decoration: none; font-weight: 600; font-size: 13px; text-transform: uppercase; }
+        .hero { height: 70vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070&auto=format&fit=crop'); background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .hero h1 { font-size: 2.5rem; color: var(--primary-gold); }
+        section { padding: 50px 10%; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid #333; overflow: hidden; }
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; border: 1px solid #444; }
+        .price { color: var(--primary-gold); font-size: 1.3rem; font-weight: bold; margin-top: 10px; display: block; }
+        #chat-widget { position: fixed; bottom: 20px; right: 20px; width: 340px; height: 500px; background: white; border-radius: 15px; display: none; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 9999; border: 2px solid var(--primary-gold); }
+        #chat-header { background: var(--dark-bg); color: var(--primary-gold); padding: 15px; font-weight: bold; display: flex; justify-content: space-between; }
+        #chat-body { flex: 1; padding: 15px; overflow-y: auto; color: #333; display: flex; flex-direction: column; gap: 10px; background: #f9f9f9; font-size: 14px; }
+        .bot-msg, .user-msg { padding: 10px; border-radius: 12px; max-width: 85%; }
+        .bot-msg { background: #eee; align-self: flex-start; }
+        .user-msg { background: var(--primary-gold); color: black; align-self: flex-end; }
+        #chat-input-container { display: flex; padding: 10px; border-top: 1px solid #ddd; }
+        #chat-trigger { position: fixed; bottom: 20px; right: 20px; background: var(--primary-gold); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 25px; z-index: 10000; }
     </style>
 </head>
 <body>
@@ -69,92 +34,63 @@
         <a href="#home">Home</a>
         <a href="#menu">Menu</a>
         <a href="#about">About</a>
-        <a href="#work">Our Work</a>
         <a href="#contact">Contact</a>
     </nav>
 
     <div class="hero" id="home">
         <h1>Taste the Quality, See the Vision</h1>
-        <p>We serve delicious, high-quality food and provide premium design services for modern brands. Enjoy great taste and elevate your business with stunning visuals.</p>
-        <div class="btn-group">
-            <button class="btn btn-gold" onclick="openChat('food')">Order Food Now</button>
-            <button class="btn btn-outline" onclick="openChat('design')">View Design Portfolio</button>
-        </div>
+        <p>Premium Food & Professional Design Services</p>
     </div>
 
     <section id="menu">
-        <h2>Our Menu</h2>
+        <h2 style="color:var(--primary-gold); margin-bottom:30px;">Our Menu</h2>
         <div class="grid">
             <div class="card">
+                <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=500" alt="Burger">
                 <h3>Signature Burger</h3>
-                <p>Premium beef patty with cheese and special sauce</p>
+                <p>Beef patty, cheese & special sauce</p>
                 <span class="price">৳650</span>
             </div>
             <div class="card">
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=500" alt="Pizza">
                 <h3>BBQ Chicken Pizza</h3>
-                <p>Smoky BBQ chicken with soft crust (Medium)</p>
+                <p>Smoky BBQ chicken & soft crust</p>
                 <span class="price">৳1200</span>
             </div>
             <div class="card">
+                <img src="https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=500" alt="Wings">
                 <h3>Spicy Wings (6 pcs)</h3>
                 <p>Crispy wings with spicy sauce</p>
                 <span class="price">৳700</span>
             </div>
             <div class="card">
+                <img src="https://images.unsplash.com/photo-1544787210-2827448b373c?q=80&w=500" alt="Latte">
                 <h3>Iced Caramel Latte</h3>
-                <p>Fresh coffee with caramel flavor</p>
+                <p>Fresh coffee with caramel</p>
                 <span class="price">৳300</span>
             </div>
         </div>
     </section>
 
-    <section id="about" style="background: var(--card-bg);">
-        <h2>About Us</h2>
-        <p style="max-width: 800px; margin: 0 auto; line-height: 1.8;">
-            We are a modern restaurant that combines delicious food with creative design services. 
-            Our mission is to deliver high-quality meals and help brands grow with eye-catching designs. 
-            Whether you are here for great food or professional design, we ensure the best experience.
-        </p>
-    </section>
-
-    <section id="work">
-        <h2>Our Work (Design Portfolio)</h2>
-        <p style="margin-bottom: 20px;">We create high-quality visuals that help restaurants attract more customers.</p>
-        <ul class="portfolio-list">
-            <li>Clean Design</li>
-            <li>High Conversion Visuals</li>
-            <li>Modern & Luxury Style</li>
-        </ul>
-    </section>
-
-    <section id="contact" style="background: var(--card-bg);">
-        <h2>Contact Us</h2>
-        <div class="contact-info">
-            <p>📍 <strong>Location:</strong> Kaliganj, Gazipur, Dhaka, Bangladesh</p>
-            <p>📞 <strong>Phone:</strong> 01402-256081</p>
-            <p>💬 <strong>WhatsApp:</strong> 01736-671858</p>
-            <p>📧 <strong>Email:</strong> premiumfooddesign@gmail.com</p>
-            <p>🕒 <strong>Hours:</strong> 10:00 AM – 11:00 PM (Everyday)</p>
-        </div>
+    <section id="contact" style="background:var(--card-bg);">
+        <h2 style="color:var(--primary-gold);">Contact Us</h2>
+        <p>📍 Kaliganj, Gazipur, Dhaka</p>
+        <p>📞 Phone: 01402-256081</p>
+        <p>💬 WhatsApp: 01736-671858</p>
     </section>
 
     <div id="chat-trigger" onclick="toggleChat()">🤖</div>
 
     <div id="chat-widget">
-        <div id="chat-header">
-            <span>Premium Assistant</span>
-            <span style="cursor:pointer" onclick="toggleChat()">✖</span>
-        </div>
-        <div id="chat-body" id="chat-body">
-            <div class="bot-msg">Hello! Welcome to our restaurant. I am your digital assistant. How can I help you today?</div>
-            <div style="display: flex; gap: 5px; margin-top: 10px;">
-                <button class="btn btn-gold" style="padding: 5px 10px; font-size: 12px;" onclick="selectFlow('food')">Order Food</button>
-                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;" onclick="selectFlow('design')">Design Service</button>
-            </div>
+        <div id="chat-header"><span>Assistant</span><span onclick="toggleChat()" style="cursor:pointer">✖</span></div>
+        <div id="chat-body">
+            <div class="bot-msg">Hello! Welcome. How can I help you?</div>
+            <button onclick="selectFlow('food')" style="padding:5px; margin-top:5px; border:1px solid gold; border-radius:5px; cursor:pointer;">Order Food</button>
+            <button onclick="selectFlow('design')" style="padding:5px; margin-top:5px; border:1px solid gold; border-radius:5px; cursor:pointer;">Design Service</button>
         </div>
         <div id="chat-input-container">
-            <input type="text" id="chat-input" placeholder="Type here..." onkeypress="checkEnter(event)">
-            <button onclick="handleUserMessage()" style="background:none; border:none; cursor:pointer; font-size:20px;">➡️</button>
+            <input type="text" id="chat-input" placeholder="Type..." style="flex:1; border:none; outline:none;">
+            <button onclick="handleMsg()">➡️</button>
         </div>
     </div>
 
@@ -162,17 +98,9 @@
         const chatWidget = document.getElementById('chat-widget');
         const chatBody = document.getElementById('chat-body');
         let currentStep = '';
-        let userData = {};
 
-        function toggleChat() {
-            chatWidget.style.display = (chatWidget.style.display === 'flex') ? 'none' : 'flex';
-        }
-
-        function openChat(flow) {
-            chatWidget.style.display = 'flex';
-            selectFlow(flow);
-        }
-
+        function toggleChat() { chatWidget.style.display = (chatWidget.style.display === 'flex') ? 'none' : 'flex'; }
+        
         function addMsg(text, sender) {
             const div = document.createElement('div');
             div.className = sender === 'bot' ? 'bot-msg' : 'user-msg';
@@ -183,49 +111,29 @@
 
         function selectFlow(flow) {
             if(flow === 'food') {
-                currentStep = 'food_item';
-                addMsg("I want to order delicious Food", "user");
-                addMsg("Great choice! Our kitchen is ready. What are you craving today?\n\n- Burger (৳650)\n- Pizza (৳1200)\n- Chicken (৳800)\n- Salad (৳450)", "bot");
+                currentStep = 'food_order';
+                addMsg("I want to order Food", "user");
+                addMsg("What would you like? (Burger, Pizza, etc.)", "bot");
             } else {
-                currentStep = 'design_type';
-                addMsg("I am interested in Design Services", "user");
-                addMsg("We are happy to help with your branding!\n\nOur Services: Logo, Food Posters, Social Media Design.\n\nPlease tell us what you need.", "bot");
+                currentStep = 'design_order';
+                addMsg("Interested in Design", "user");
+                addMsg("Logo, Poster, or Social Media? Please specify.", "bot");
             }
         }
 
-        function checkEnter(e) { if(e.key === 'Enter') handleUserMessage(); }
-
-        function handleUserMessage() {
+        function handleMsg() {
             const input = document.getElementById('chat-input');
-            const msg = input.value.trim();
-            if(!msg) return;
-
-            addMsg(msg, "user");
+            if(!input.value) return;
+            addMsg(input.value, "user");
+            
+            if(currentStep === 'food_order' || currentStep === 'design_order') {
+                addMsg("Please provide your Name and Contact Number.", "bot");
+                currentStep = 'contact';
+            } else if(currentStep === 'contact') {
+                addMsg("Thank you! We will contact you shortly to confirm.", "bot");
+                currentStep = '';
+            }
             input.value = '';
-
-            // Logic Flow
-            if(currentStep === 'food_item') {
-                userData.food = msg;
-                currentStep = 'food_address';
-                addMsg("Please provide your: Full Name, Phone, and Delivery Address.", "bot");
-            } 
-            else if(currentStep === 'food_address') {
-                addMsg(`Thank you! Your order for ${userData.food} is confirmed. We will contact you shortly. Enjoy your meal! 🍽️`, "bot");
-                currentStep = '';
-            }
-            else if(currentStep === 'design_type') {
-                userData.design = msg;
-                currentStep = 'design_details';
-                addMsg("Please provide details: Size (A4/Square), Main Text, and Style (Luxury/Minimal).", "bot");
-            }
-            else if(currentStep === 'design_details') {
-                currentStep = 'design_contact';
-                addMsg("Please share your Name and WhatsApp Number.", "bot");
-            }
-            else if(currentStep === 'design_contact') {
-                addMsg("Thank you! We have received your request. We will contact you with a professional proposal soon.", "bot");
-                currentStep = '';
-            }
         }
     </script>
 </body>
