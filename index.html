@@ -1,193 +1,311 @@
-                <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fruit Ninja: Falling Edition - Isaac Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grandiose Restaurant | Royal Dining Experience</title>
     <style>
-        body { margin: 0; background: #0a0a0a; overflow: hidden; font-family: 'Segoe UI', sans-serif; touch-action: none; cursor: crosshair; }
-        canvas { display: block; background: radial-gradient(circle, #222 0%, #000 100%); }
-        #ui { position: absolute; top: 20px; width: 100%; display: flex; justify-content: space-around; color: gold; font-size: 24px; font-weight: bold; pointer-events: none; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); z-index: 5; }
-        #overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; }
-        .award-title { color: gold; font-size: 35px; margin-bottom: 10px; text-shadow: 0 0 20px gold; }
-        .trophy { font-size: 80px; margin: 20px 0; display: none; filter: drop-shadow(0 0 15px gold); }
-        button { background: gold; color: #000; border: none; padding: 15px 40px; font-size: 20px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 0 20px gold; }
+        /* লাক্সারি কালার প্যালেট */
+        :root {
+            --primary-gold: #d4af37;
+            --dark-background: #0d0d0d;
+            --mid-background: #1a1a1a;
+            --text-gold: #f2d06b;
+            --text-white: #ffffff;
+            --soft-gray: #a0a0a0;
+        }
+
+        /* বেসিক সেটআপ */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-background);
+            color: var(--text-white);
+            font-family: 'Playfair Display', serif; /* ক্লাসিক ফন্ট */
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        p {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+        }
+
+        /* 1. হিরো সেকশন - সিনেমাটিক ফিল */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('grandiose_banner.jpg'); /* এখানে রেস্টুরেন্টের ছবি দেবেন */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(transparent, var(--dark-background));
+        }
+
+        .branding-title {
+            font-size: 5rem;
+            color: var(--text-white);
+            letter-spacing: 10px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        .branding-tagline {
+            color: var(--primary-gold);
+            font-size: 1.5rem;
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+
+        .btn-call {
+            padding: 15px 40px;
+            border: 2px solid var(--primary-gold);
+            color: var(--primary-gold);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: 0.4s ease;
+        }
+
+        .btn-call:hover {
+            background-color: var(--primary-gold);
+            color: #000;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+
+        /* 2. খাবার আইটেম সেকশন */
+        .menu-highlights {
+            padding: 100px 20px;
+            text-align: center;
+            background-color: var(--mid-background);
+        }
+
+        .section-title {
+            color: var(--primary-gold);
+            margin-bottom: 80px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .menu-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid #222;
+            padding: 30px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .menu-item:hover {
+            border-color: var(--primary-gold);
+            transform: translateY(-5px);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            background: #111; /* প্লেসহোল্ডার */
+            margin-bottom: 20px;
+            border-radius: 3px;
+        }
+
+        .item-name {
+            font-size: 1.4rem;
+            color: var(--text-gold);
+            margin-bottom: 10px;
+        }
+
+        .item-desc {
+            color: var(--soft-gray);
+            font-size: 0.9rem;
+        }
+
+        /* 3. AI এসিস্ট্যান্ট উইজেট */
+        .ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: var(--mid-background);
+            border-radius: 10px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.7);
+            border: 2px solid var(--primary-gold);
+            overflow: hidden;
+            z-index: 1000;
+            display: none; /* শুরুতে লুকানো */
+            flex-direction: column;
+        }
+
+        .ai-header {
+            background: var(--primary-gold);
+            color: #000;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .ai-chat-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            color: #ccc;
+        }
+
+        .ai-message {
+            background: #222;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+
+        .user-input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #222;
+        }
+
+        #chatInput {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .ai-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary-gold);
+            color: #000;
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            z-index: 1000;
+        }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div id="ui">
-        <div>Time: <span id="timer">15</span>s</div>
-        <div>Score: <span id="score">0</span></div>
-        <div>Round: <span id="round">1</span></div>
-    </div>
+    <section class="hero">
+        <h1 class="branding-title">Grandiose</h1>
+        <p class="branding-tagline">Royal Dining Experience | Dhaka Regency Hotel</p>
+        <a href="tel:01713332661" class="btn-call">আজই বুক করুন</a>
+    </section>
 
-    <div id="overlay">
-        <h1 id="status-text" class="award-title">READY TO SLICE?</h1>
-        <div id="trophy" class="trophy">🏆</div>
-        <button id="action-btn" onclick="startCurrentRound()">START ROUND 1</button>
-    </div>
+    <section class="menu-highlights">
+        <h2 class="section-title">Royal Signature Dishes</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <div class="item-image"></div> <h3 class="item-name">Arabian Delights</h3>
+                <p class="item-desc">আমাদের সিগনেচার এরাবিয়ান ডিশ, যেখানে পাবেন সুগন্ধি বাসমতি চাল আর দারুণ স্বাদের মাটন।</p>
+            </div>
+            <div class="menu-item">
+                <div class="item-image"></div>
+                <h3 class="item-name">Grandiose Kabab Plat</h3>
+                <p class="item-desc">ঐতিহ্যবাহী মশলায় মোড়ানো নরম জুসি কাবাবের সেরা কালেকশন।</p>
+            </div>
+            <div class="menu-item">
+                <div class="item-image"></div>
+                <h3 class="item-name">The Grand Buffet</h3>
+                <p class="item-desc">ইন্টারন্যাশনাল এবং লোকাল আইটেমের রাজকীয় বুফে।</p>
+            </div>
+            <div class="menu-item">
+                <div class="item-image"></div>
+                <h3 class="item-name">Dessert Extravaganza</h3>
+                <p class="item-desc">প্রিমিয়াম ডেজার্ট প্লাট, যা আপনার খাওয়ার অভিজ্ঞতায় মিষ্টি একটা শেষ টাচ দেবে।</p>
+            </div>
+        </div>
+    </section>
 
-    <canvas id="gameCanvas"></canvas>
+    <div class="ai-toggle" id="aiToggle">💬</div>
+    <div class="ai-assistant" id="aiWindow">
+        <div class="ai-header" id="aiClose">Grandiose AI Butler (বন্ধ করুন)</div>
+        <div class="ai-chat-area" id="aiChatArea">
+            <div class="ai-message ai-message-ai">আপনাকে স্বাগতম। আমি Grandiose রেস্টুরেন্টের AI এসিস্ট্যান্ট। আমাদের খাবার বা বুকিং সম্পর্কে কী জানতে চান?</div>
+        </div>
+        <div class="user-input-area">
+            <input type="text" id="chatInput" placeholder="আপনার প্রশ্নটি লিখুন...">
+        </div>
+    </div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const timerEl = document.getElementById('timer');
-        const scoreEl = document.getElementById('score');
-        const roundEl = document.getElementById('round');
-        const overlay = document.getElementById('overlay');
-        const statusText = document.getElementById('status-text');
-        const trophy = document.getElementById('trophy');
-        const actionBtn = document.getElementById('action-btn');
+        const aiToggle = document.getElementById('aiToggle');
+        const aiWindow = document.getElementById('aiWindow');
+        const aiClose = document.getElementById('aiClose');
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // AI উইজেট খোলা/বন্ধ করা
+        aiToggle.addEventListener('click', () => {
+            aiWindow.style.display = 'flex';
+            aiToggle.style.display = 'none';
+        });
 
-        let score = 0;
-        let timeLeft = 15;
-        let round = 1;
-        let active = false;
-        let fruits = [];
-        let particles = [];
-        let swordPath = [];
-        
-        // Realistic Sword Sound
-        const sliceSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
+        aiClose.addEventListener('click', () => {
+            aiWindow.style.display = 'none';
+            aiToggle.style.display = 'block';
+        });
 
-        class Fruit {
-            constructor() {
-                this.x = Math.random() * (canvas.width - 60) + 30;
-                this.y = -50;
-                this.r = 30 + Math.random() * 15;
-                this.color = ['#FF3B30', '#FFCC00', '#4CD964', '#FF9500', '#AF52DE'][Math.floor(Math.random()*5)];
-                this.speedY = 3 + Math.random() * (2 + round); // Speed increases with round
-                this.sliced = false;
+        // AI এর রেসপন্স সিমুলেশন (আসল AI না)
+        const chatInput = document.getElementById('chatInput');
+        const aiChatArea = document.getElementById('aiChatArea');
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const userMessage = chatInput.value;
+                if(userMessage === '') return;
+
+                // ইউজারের মেসেজ যোগ করা
+                const userMsgDiv = document.createElement('div');
+                userMsgDiv.classList.add('ai-message');
+                userMsgDiv.style.background = '#333';
+                userMsgDiv.style.marginLeft = 'auto';
+                userMsgDiv.innerText = userMessage;
+                aiChatArea.appendChild(userMsgDiv);
+
+                chatInput.value = ''; // ইনপুট খালি করা
+
+                // AI এর রেসপন্স যোগ করা (উদাহরণ)
+                setTimeout(() => {
+                    const aiMsgDiv = document.createElement('div');
+                    aiMsgDiv.classList.add('ai-message');
+                    aiMsgDiv.innerText = "জি, আমাদের এখানে প্রিমিয়াম বুফে ২,০০০+ টাকায় অ্যাভেলেবল আছে। আপনি কি নির্দিষ্ট কোনো দিন বুক করতে চান?";
+                    aiChatArea.appendChild(aiMsgDiv);
+                    // অটো স্ক্রল নিচে
+                    aiChatArea.scrollTop = aiChatArea.scrollHeight;
+                }, 1500);
             }
-            draw() {
-                if(this.sliced) return;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-                // Shine effect
-                ctx.beginPath();
-                ctx.arc(this.x - this.r/3, this.y - this.r/3, this.r/4, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255,255,255,0.3)';
-                ctx.fill();
-            }
-        }
-
-        function startCurrentRound() {
-            overlay.style.display = 'none';
-            score = 0;
-            scoreEl.innerText = score;
-            timeLeft = round === 1 ? 15 : (round === 2 ? 20 : 30);
-            timerEl.innerText = timeLeft;
-            active = true;
-            
-            const timerInterval = setInterval(() => {
-                if(!active) { clearInterval(timerInterval); return; }
-                timeLeft--;
-                timerEl.innerText = timeLeft;
-                if(timeLeft <= 0) endRound();
-            }, 1000);
-            
-            animate();
-        }
-
-        function endRound() {
-            active = false;
-            overlay.style.display = 'flex';
-            const targetScore = round * 12;
-            
-            if(score >= targetScore) {
-                statusText.innerText = "ROUND " + round + " PASSED!";
-                trophy.style.display = 'block';
-                round++;
-                if(round > 3) {
-                    statusText.innerText = "ULTIMATE CHAMPION! 🏆";
-                    actionBtn.innerText = "RESTART GAME";
-                    round = 1;
-                } else {
-                    actionBtn.innerText = "START ROUND " + round;
-                }
-            } else {
-                statusText.innerText = "FAILED! NEED " + targetScore + " POINTS";
-                trophy.style.display = 'none';
-                actionBtn.innerText = "TRY AGAIN";
-            }
-        }
-
-        function handleInteraction(x, y) {
-            if(!active) return;
-            
-            // Draw Sword Trail
-            swordPath.push({x, y, age: 0});
-            if(swordPath.length > 10) swordPath.shift();
-
-            fruits.forEach(f => {
-                let d = Math.hypot(x - f.x, y - f.y);
-                if(d < f.r && !f.sliced) {
-                    f.sliced = true;
-                    score++;
-                    scoreEl.innerText = score;
-                    sliceSound.currentTime = 0;
-                    sliceSound.play();
-                    // Splatter particles
-                    for(let i=0; i<12; i++) {
-                        particles.push({
-                            x: f.x, y: f.y,
-                            vx: (Math.random()-0.5)*10,
-                            vy: (Math.random()-0.5)*10,
-                            alpha: 1, color: f.color
-                        });
-                    }
-                }
-            });
-        }
-
-        window.addEventListener('mousemove', (e) => handleInteraction(e.clientX, e.clientY));
-        window.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
-        }, {passive: false});
-
-        function animate() {
-            if(!active && particles.length === 0) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Spawn Fruits from Top
-            if(Math.random() < 0.04 + (round * 0.01)) fruits.push(new Fruit());
-
-            fruits.forEach((f, i) => {
-                f.y += f.speedY;
-                f.draw();
-                if(f.y > canvas.height + 50) fruits.splice(i, 1);
-            });
-
-            // Particles update
-            particles.forEach((p, i) => {
-                p.x += p.vx; p.y += p.vy; p.alpha -= 0.02;
-                ctx.globalAlpha = p.alpha;
-                ctx.fillStyle = p.color;
-                ctx.fillRect(p.x, p.y, 6, 6);
-                if(p.alpha <= 0) particles.splice(i, 1);
-            });
-            ctx.globalAlpha = 1;
-
-            // Draw Sword Trail
-            if(swordPath.length > 1) {
-                ctx.beginPath();
-                ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
-                ctx.lineWidth = 3;
-                ctx.moveTo(swordPath[0].x, swordPath[0].y);
-                for(let i=1; i<swordPath.length; i++) ctx.lineTo(swordPath[i].x, swordPath[i].y);
-                ctx.stroke();
-            }
-
-            requestAnimationFrame(animate);
-        }
+        });
     </script>
+
 </body>
 </html>
