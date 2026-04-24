@@ -3,174 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grandiose Restaurant | Royal Dining</title>
+    <title>Grand Feast | Premium AI Restaurant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* লাক্সারি কালার প্যালেট */
-        :root {
-            --primary-gold: #d4af37;
-            --dark-background: #0d0d0d;
-            --mid-background: #1a1a1a;
-            --text-white: #ffffff;
-            --soft-gray: #c0c0c0;
-        }
-
-        /* বেসিক সেটআপ */
         body {
             margin: 0;
-            padding: 0;
-            background-color: var(--dark-background);
-            color: var(--text-white);
-            font-family: 'Playfair Display', serif; /* ক্লাসিক ফন্ট */
-            scroll-behavior: smooth;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fcfaf5;
+            color: #333;
         }
 
-        h1, h2, h3 { margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        p { font-family: 'Open Sans', sans-serif; font-weight: 300; }
-
-        /* 1. হিরো সেকশন - আসল ব্যানার ছবি সহ */
+        /* Hero Section */
         .hero {
             height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), 
-                        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop'); /* আসল ব্যানার ছবি */
-            background-size: cover; background-position: center;
-            padding: 0 20px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://i.ibb.co/LzdYp0f/restaurant-image.jpg'); /* এখানে আপনার দেওয়া ছবিটির লিংক বসবে */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
         }
 
-        .branding-title { font-size: 5rem; color: var(--text-white); letter-spacing: 10px; }
-        .branding-tagline { color: var(--primary-gold); font-size: 1.5rem; margin: 20px 0 50px 0; }
-        .btn-gold { padding: 15px 40px; border: 2px solid var(--primary-gold); color: var(--primary-gold); text-decoration: none; font-weight: bold; transition: 0.4s; }
-        .btn-gold:hover { background: var(--primary-gold); color: #000; box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
 
-        /* 2. খাবার আইটেম সেকশন */
-        .menu-highlights { padding: 100px 20px; text-align: center; }
-        .section-title { color: var(--primary-gold); margin-bottom: 80px; }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
 
-        /* খাবারের কার্ড ডিজাইন */
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
-        .menu-item { background: rgba(255,255,255,0.02); border: 1px solid #222; border-radius: 8px; overflow: hidden; transition: 0.3s; }
-        .menu-item:hover { border-color: var(--primary-gold); transform: translateY(-5px); }
+        .btn {
+            padding: 12px 30px;
+            background-color: #d4af37; /* Gold color */
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
 
-        /* আসল খাবারের ছবি */
-        .item-image { width: 100%; height: 250px; background-size: cover; background-position: center; }
-        
-        .item-details { padding: 30px; text-align: left; }
-        .item-name { font-size: 1.4rem; color: #f2d06b; margin-bottom: 10px; }
-        .item-desc { color: var(--soft-gray); font-size: 0.95rem; line-height: 1.6; min-height: 60px; }
-        .item-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 1px solid #222; padding-top: 15px; }
-        .item-price { color: var(--primary-gold); font-size: 1.2rem; font-weight: bold; }
-        .btn-item { padding: 8px 20px; border: 1px solid #444; color: #fff; text-decoration: none; font-size: 0.8rem; border-radius: 3px; transition: 0.3s; }
-        .btn-item:hover { border-color: var(--primary-gold); color: var(--primary-gold); }
+        .btn:hover {
+            background-color: #b8962e;
+        }
 
-        /* 3. AI এসিস্ট্যান্ট উইজেট (আগের মতোই) */
-        .ai-assistant { position: fixed; bottom: 30px; right: 30px; width: 350px; height: 500px; background: var(--mid-background); border-radius: 10px; border: 2px solid var(--primary-gold); overflow: hidden; z-index: 1000; display: none; flex-direction: column; }
-        .ai-header { background: var(--primary-gold); color: #000; padding: 15px; font-weight: bold; text-align: center; cursor: pointer; }
-        .ai-chat-area { flex: 1; padding: 20px; overflow-y: auto; color: #ccc; display: flex; flex-direction: column-reverse; }
-        .ai-message { background: #222; padding: 10px 15px; border-radius: 10px; margin-bottom: 15px; max-width: 80%; align-self: flex-start; }
-        .user-message { background: #333; color: #fff; align-self: flex-end; }
-        .user-input-area { display: flex; padding: 10px; border-top: 1px solid #222; }
-        #chatInput { flex: 1; padding: 10px; background: transparent; border: 1px solid #333; color: white; border-radius: 5px; }
-        .ai-toggle { position: fixed; bottom: 30px; right: 30px; background: var(--primary-gold); color: #000; padding: 15px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); z-index: 1000; }
+        /* Menu Section */
+        .menu-section {
+            padding: 80px 10%;
+            text-align: center;
+        }
 
-        /* মোবাইল অপ্টিমাইজেশন (image_3.png সমস্যা সমাধান) */
-        @media (max-width: 768px) {
-            .branding-title { font-size: 3rem; letter-spacing: 5px; }
-            .branding-tagline { font-size: 1.1rem; }
-            .item-details { text-align: center; }
-            .item-meta { flex-direction: column; gap: 15px; text-align: center; }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .menu-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .menu-item img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .price {
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* AI Chatbot UI */
+        #ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 300px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .chat-header {
+            background: #d4af37;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .chat-box {
+            height: 300px;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+        }
+
+        .chat-input {
+            border: none;
+            border-top: 1px solid #eee;
+            padding: 15px;
+            outline: none;
+        }
+
+        .ai-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #d4af37;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <section class="hero">
-        <h1 class="branding-title">Grandiose</h1>
-        <p class="branding-tagline">Royal Dining Experience | Dhaka Regency Hotel</p>
-        <a href="tel:01713332661" class="btn-gold">আজই বুক করুন</a>
+        <h1>Grand Feast</h1>
+        <p>একটি আধুনিক এআই চালিত ডাইনিং অভিজ্ঞতা</p>
+        <a href="#menu" class="btn">মেনু দেখুন</a>
     </section>
 
-    <section class="menu-highlights">
-        <h2 class="section-title">Royal Signature Dishes</h2>
+    <section id="menu" class="menu-section">
+        <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem;">আমাদের সিগনেচার ডিশ</h2>
         <div class="menu-grid">
             <div class="menu-item">
-                <div class="item-image" style="background-image: url('https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?q=80&w=600&auto=format&fit=crop');"></div>
-                <div class="item-details">
-                    <h3 class="item-name">Arabian Delights</h3>
-                    <p class="item-desc">আমাদের সিগনেচার এরাবিয়ান ডিশ, যেখানে পাবেন সুগন্ধি বাসমতি চাল আর দারুণ স্বাদের মাটন।</p>
-                    <div class="item-meta">
-                        <span class="item-price">২,৪৯৯/-</span>
-                        <a href="#" class="btn-item">বুক করুন</a>
-                    </div>
-                </div>
+                <img src="https://via.placeholder.com/200" alt="Food">
+                <h3>রয়্যাল বিরিয়ানি</h3>
+                <p>সবচেয়ে সুস্বাদু বাসমতি চাল ও খাসির মাংসের মিশ্রণ।</p>
+                <p class="price">৳৮৫০</p>
             </div>
             <div class="menu-item">
-                <div class="item-image" style="background-image: url('https://images.unsplash.com/photo-1593003001088-75765955b252?q=80&w=600&auto=format&fit=crop');"></div>
-                <div class="item-details">
-                    <h3 class="item-name">Grandiose Kabab Platter</h3>
-                    <p class="item-desc">ঐতিহ্যবাহী মশলায় মোড়ানো নরম জুসি কাবাবের সেরা কালেকশন।</p>
-                    <div class="item-meta">
-                        <span class="item-price">১,৮৯৯/-</span>
-                        <a href="#" class="btn-item">বুক করুন</a>
-                    </div>
-                </div>
+                <img src="https://via.placeholder.com/200" alt="Food">
+                <h3>গ্রিলড চিকেন প্ল্যাটর</h3>
+                <p>শেফ স্পেশাল মশলায় তৈরি করা স্মোকি চিকেন।</p>
+                <p class="price">৳৬৫০</p>
             </div>
             <div class="menu-item">
-                <div class="item-image" style="background-image: url('https://images.unsplash.com/photo-1563812759885-b108527a5d3f?q=80&w=600&auto=format&fit=crop');"></div>
-                <div class="item-details">
-                    <h3 class="item-name">Continental Buffet</h3>
-                    <p class="item-desc">ইন্টারন্যাশনাল এবং লোকাল আইটেমের রাজকীয় বুফে।</p>
-                    <div class="item-meta">
-                        <span class="item-price">২,২০০/-</span>
-                        <a href="#" class="btn-item">বুক করুন</a>
-                    </div>
-                </div>
+                <img src="https://via.placeholder.com/200" alt="Food">
+                <h3>সিফিশ প্ল্যাটার</h3>
+                <p>তাজা সামুদ্রিক মাছের ফ্রাই এবং সস।</p>
+                <p class="price">৳১২০০</p>
             </div>
         </div>
     </section>
 
-    <div class="ai-toggle" id="aiToggle">💬</div>
-    <div class="ai-assistant" id="aiWindow">
-        <div class="ai-header" id="aiClose">Grandiose AI (বন্ধ করুন)</div>
-        <div class="ai-chat-area" id="aiChatArea">
-            <div class="ai-message">স্বাগতম। আমি Grandiose AI। খাবার বা বুকিং সম্পর্কে কী জানতে চান?</div>
+    <!-- AI Assistant -->
+    <div id="ai-assistant">
+        <div class="chat-header">Grand Feast AI Assistant</div>
+        <div class="chat-box" id="chat-box">
+            <p><strong>AI:</strong> আসসালামু আলাইকুম! আমি গ্র্যান্ড ফিস্ট এআই। আপনি আজ রাতে কি খেতে পছন্দ করবেন? অথবা কোনো ডিশ সম্পর্কে জানতে চান?</p>
         </div>
-        <div class="user-input-area">
-            <input type="text" id="chatInput" placeholder="লিখুন...">
-        </div>
+        <input type="text" class="chat-input" id="user-input" placeholder="আপনার প্রশ্নটি লিখুন...">
     </div>
 
+    <div class="ai-toggle" onclick="toggleChat()">এআই অ্যাসিস্ট্যান্ট এর সাথে কথা বলুন</div>
+
     <script>
-        const aiToggle = document.getElementById('aiToggle');
-        const aiWindow = document.getElementById('aiWindow');
-        const aiClose = document.getElementById('aiClose');
-        const chatInput = document.getElementById('chatInput');
-        const aiChatArea = document.getElementById('aiChatArea');
+        function toggleChat() {
+            var chat = document.getElementById("ai-assistant");
+            chat.style.display = (chat.style.display === "flex") ? "none" : "flex";
+        }
 
-        aiToggle.addEventListener('click', () => { aiWindow.style.display = 'flex'; aiToggle.style.display = 'none'; });
-        aiClose.addEventListener('click', () => { aiWindow.style.display = 'none'; aiToggle.style.display = 'block'; });
+        const input = document.getElementById('user-input');
+        const chatBox = document.getElementById('chat-box');
 
-        chatInput.addEventListener('keypress', (e) => {
+        input.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
-                const userMessage = chatInput.value;
-                if(userMessage === '') return;
+                let userText = input.value;
+                chatBox.innerHTML += `<p><strong>আপনি:</strong> ${userText}</p>`;
+                input.value = '';
 
-                const userMsgDiv = document.createElement('div');
-                userMsgDiv.classList.add('ai-message', 'user-message');
-                userMsgDiv.innerText = userMessage;
-                aiChatArea.prepend(userMsgDiv); // শেষে যোগ করার বদলে শুরুতে যোগ করা (flex-direction: column-reverse এর কারণে)
-
-                chatInput.value = '';
-
+                // Simulated AI Logic
                 setTimeout(() => {
-                    const aiMsgDiv = document.createElement('div');
-                    aiMsgDiv.classList.add('ai-message');
-                    aiMsgDiv.innerText = "জি, ধন্যবাদ। বিস্তারিত জানার জন্য দয়া করে আমাদের বুকিং নম্বরে কল করুন।";
-                    aiChatArea.prepend(aiMsgDiv);
-                }, 1500);
+                    let aiResponse = "চমৎকার পছন্দ! আমাদের রয়্যাল বিরিয়ানি আজ বেশ জনপ্রিয়। আপনি কি অর্ডার করতে চান?";
+                    if(userText.includes("অর্ডার")) aiResponse = "অবশ্যই! আপনার ফোন নাম্বারটি দিন, আমরা যোগাযোগ করছি।";
+                    chatBox.innerHTML += `<p><strong>AI:</strong> ${aiResponse}</p>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 1000);
             }
         });
     </script>
-
 </body>
 </html>
