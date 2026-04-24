@@ -3,40 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Isaac Pro Racer - High Speed</title>
+    <title>Velocity: Luxury Racing - Isaac Designer</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; font-family: 'Arial', sans-serif; touch-action: none; }
-        canvas { display: block; background: #111; margin: 0 auto; box-shadow: 0 0 50px gold; }
-        #ui { position: absolute; top: 10px; width: 100%; text-align: center; color: gold; font-size: 24px; font-weight: bold; pointer-events: none; z-index: 5; }
-        #start-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; }
-        h1 { color: gold; font-size: 40px; margin: 0; letter-spacing: 5px; }
-        p { color: white; margin-top: 10px; font-size: 14px; }
-        button { background: gold; color: black; border: none; padding: 15px 50px; font-size: 20px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 20px; box-shadow: 0 0 20px gold; }
-        .controls { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: space-between; padding: 0 30px; box-sizing: border-box; }
-        .btn { width: 100px; height: 100px; background: rgba(255, 215, 0, 0.2); border: 3px solid gold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: gold; -webkit-user-select: none; }
+        :root { --gold: #d4af37; --black: #0a0a0a; --red: #ff4d4d; }
+        body { margin: 0; background: var(--black); color: white; font-family: 'Arial', sans-serif; overflow: hidden; touch-action: none; }
+        canvas { display: block; background: #111; margin: 0 auto; box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
+        #ui { position: absolute; top: 15px; width: 100%; text-align: center; pointer-events: none; }
+        .score-board { font-size: 28px; font-weight: bold; color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+        #start-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; }
+        h1 { color: var(--gold); font-size: 45px; margin: 0; letter-spacing: 4px; text-shadow: 0 0 20px var(--gold); }
+        button { background: var(--gold); color: black; border: none; padding: 15px 45px; font-size: 22px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 25px; box-shadow: 0 0 25px var(--gold); }
+        .controls { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: space-around; padding: 0 20px; box-sizing: border-box; }
+        .btn { width: 90px; height: 90px; background: rgba(212, 175, 55, 0.2); border: 3px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--gold); user-select: none; }
     </style>
 </head>
 <body>
 
-    <div id="ui">Score: <span id="score">0</span></div>
+    <div id="ui">
+        <div class="score-board">SCORE: <span id="scoreVal">0</span></div>
+    </div>
 
     <div id="start-screen">
-        <h1>ISAAC RACER</h1>
-        <p>অন্য গাড়িগুলো এড়িয়ে সর্বোচ্চ স্কোর করুন!</p>
-        <button onclick="startGame()">START ENGINE</button>
+        <h1>VELOCITY</h1>
+        <p style="color: #888; margin-top: 10px;">LUXURY RACING EDITION</p>
+        <button onclick="startGame()">START RACE</button>
     </div>
 
     <canvas id="gameCanvas"></canvas>
 
     <div class="controls" id="controls" style="display: none;">
-        <div class="btn" id="leftBtn">◀</div>
-        <div class="btn" id="rightBtn">▶</div>
+        <div class="btn" id="lBtn">◀</div>
+        <div class="btn" id="rBtn">▶</div>
     </div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const scoreVal = document.getElementById('score');
+        const scoreVal = document.getElementById('scoreVal');
         const startScreen = document.getElementById('start-screen');
         const controls = document.getElementById('controls');
 
@@ -45,7 +48,7 @@
 
         let gameActive = false;
         let score = 0;
-        let gameSpeed = 5;
+        let speed = 6;
         let player = { x: canvas.width / 2 - 25, y: canvas.height - 150, w: 50, h: 90 };
         let enemies = [];
         let moveDir = 0;
@@ -53,54 +56,45 @@
         function startGame() {
             gameActive = true;
             score = 0;
-            gameSpeed = 5;
+            speed = 6;
             enemies = [];
             startScreen.style.display = 'none';
             controls.style.display = 'flex';
-            requestAnimationFrame(update);
+            animate();
         }
 
-        // Controls Logic
-        document.getElementById('leftBtn').addEventListener('touchstart', () => moveDir = -8);
-        document.getElementById('rightBtn').addEventListener('touchstart', () => moveDir = 8);
-        document.getElementById('leftBtn').addEventListener('touchend', () => moveDir = 0);
-        document.getElementById('rightBtn').addEventListener('touchend', () => moveDir = 0);
-
-        // PC Controls
-        window.onkeydown = (e) => {
-            if(e.key === "ArrowLeft") moveDir = -8;
-            if(e.key === "ArrowRight") moveDir = 8;
-        };
-        window.onkeyup = () => moveDir = 0;
+        // Mobile Controls
+        document.getElementById('lBtn').addEventListener('touchstart', (e) => { e.preventDefault(); moveDir = -9; });
+        document.getElementById('rBtn').addEventListener('touchstart', (e) => { e.preventDefault(); moveDir = 9; });
+        document.addEventListener('touchend', () => moveDir = 0);
 
         function spawnEnemy() {
-            if (Math.random() < 0.02) {
-                let laneWidth = canvas.width / 3;
+            if (Math.random() < 0.025) {
                 let lane = Math.floor(Math.random() * 3);
-                enemies.push({ x: lane * laneWidth + (laneWidth/2 - 25), y: -100, w: 50, h: 90 });
+                enemies.push({ x: lane * (canvas.width/3) + (canvas.width/6 - 25), y: -100, w: 50, h: 90 });
             }
         }
 
-        function update() {
+        function animate() {
             if (!gameActive) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw Road
-            ctx.fillStyle = "#222";
+            ctx.fillStyle = "#151515";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = "gold";
-            ctx.setLineDash([40, 20]);
-            ctx.lineWidth = 5;
+            ctx.strokeStyle = "rgba(212, 175, 55, 0.4)";
+            ctx.setLineDash([30, 20]);
+            ctx.lineWidth = 4;
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 3, 0); ctx.lineTo(canvas.width / 3, canvas.height);
-            ctx.moveTo(2 * canvas.width / 3, 0); ctx.lineTo(2 * canvas.width / 3, canvas.height);
+            ctx.moveTo(canvas.width/3, 0); ctx.lineTo(canvas.width/3, canvas.height);
+            ctx.moveTo(2*canvas.width/3, 0); ctx.lineTo(2*canvas.width/3, canvas.height);
             ctx.stroke();
 
-            // Player Car (Isaac Special)
+            // Player Car (Gold Style)
             ctx.fillStyle = "gold";
             ctx.shadowBlur = 20; ctx.shadowColor = "gold";
             ctx.fillRect(player.x, player.y, player.w, player.h);
-            ctx.fillStyle = "black"; // Windshield
+            ctx.fillStyle = "black"; // Glass
             ctx.fillRect(player.x + 10, player.y + 15, 30, 20);
             ctx.shadowBlur = 0;
 
@@ -111,30 +105,26 @@
             // Enemies
             spawnEnemy();
             enemies.forEach((en, index) => {
-                en.y += gameSpeed;
+                en.y += speed;
                 ctx.fillStyle = "#ff4d4d"; // Red enemy cars
                 ctx.fillRect(en.x, en.y, en.w, en.h);
 
-                // Collision Check
+                // Collision
                 if (player.x < en.x + en.w && player.x + player.w > en.x && player.y < en.y + en.h && player.y + player.h > en.y) {
-                    gameOver();
+                    gameActive = false;
+                    alert("CRASHED! FINAL SCORE: " + score);
+                    location.reload();
                 }
 
                 if(en.y > canvas.height) {
                     enemies.splice(index, 1);
                     score++;
                     scoreVal.innerText = score;
-                    if(score % 10 === 0) gameSpeed += 0.5; // গতি বাড়ানো
+                    if(score % 15 === 0) speed += 0.8; 
                 }
             });
 
-            requestAnimationFrame(update);
-        }
-
-        function gameOver() {
-            gameActive = false;
-            alert("💥 CRASHED! 💥\nYour Final Score: " + score);
-            location.reload();
+            requestAnimationFrame(animate);
         }
     </script>
 </body>
