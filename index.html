@@ -3,137 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Restaurant & Design Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Burger Stack - Premium Game</title>
     <style>
-        :root { --primary-gold: #d4af37; --dark-bg: #111111; --card-bg: #1a1a1a; --text-light: #f4f4f4; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
-        body { background-color: var(--dark-bg); color: var(--text-light); }
-        nav { background: rgba(0,0,0,0.9); padding: 15px; display: flex; justify-content: space-around; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--primary-gold); }
-        nav a { color: var(--text-light); text-decoration: none; font-weight: 600; font-size: 13px; text-transform: uppercase; }
-        .hero { height: 70vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070&auto=format&fit=crop'); background-size: cover; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-        .hero h1 { font-size: 2.5rem; color: var(--primary-gold); }
-        section { padding: 50px 10%; text-align: center; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: var(--card-bg); padding: 20px; border-radius: 15px; border: 1px solid #333; overflow: hidden; }
-        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; border: 1px solid #444; }
-        .price { color: var(--primary-gold); font-size: 1.3rem; font-weight: bold; margin-top: 10px; display: block; }
-        #chat-widget { position: fixed; bottom: 20px; right: 20px; width: 340px; height: 500px; background: white; border-radius: 15px; display: none; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 9999; border: 2px solid var(--primary-gold); }
-        #chat-header { background: var(--dark-bg); color: var(--primary-gold); padding: 15px; font-weight: bold; display: flex; justify-content: space-between; }
-        #chat-body { flex: 1; padding: 15px; overflow-y: auto; color: #333; display: flex; flex-direction: column; gap: 10px; background: #f9f9f9; font-size: 14px; }
-        .bot-msg, .user-msg { padding: 10px; border-radius: 12px; max-width: 85%; }
-        .bot-msg { background: #eee; align-self: flex-start; }
-        .user-msg { background: var(--primary-gold); color: black; align-self: flex-end; }
-        #chat-input-container { display: flex; padding: 10px; border-top: 1px solid #ddd; }
-        #chat-trigger { position: fixed; bottom: 20px; right: 20px; background: var(--primary-gold); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 25px; z-index: 10000; }
+        body { margin: 0; background: #111; color: white; font-family: sans-serif; overflow: hidden; text-align: center; }
+        canvas { display: block; background: #1a1a1a; margin: 0 auto; box-shadow: 0 0 20px #d4af37; border-bottom: 5px solid #d4af37; }
+        #ui { position: absolute; top: 20px; width: 100%; pointer-events: none; }
+        .score-box { font-size: 30px; font-weight: bold; color: #d4af37; }
+        #start-screen { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 30px; border: 2px solid #d4af37; border-radius: 15px; width: 80%; max-width: 300px; }
+        button { background: #d4af37; color: black; border: none; padding: 10px 25px; font-size: 18px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#menu">Menu</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-    </nav>
-
-    <div class="hero" id="home">
-        <h1>Taste the Quality, See the Vision</h1>
-        <p>Premium Food & Professional Design Services</p>
+    <div id="ui">
+        <div class="score-box">Score: <span id="score">0</span></div>
     </div>
 
-    <section id="menu">
-        <h2 style="color:var(--primary-gold); margin-bottom:30px;">Our Menu</h2>
-        <div class="grid">
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=500" alt="Burger">
-                <h3>Signature Burger</h3>
-                <p>Beef patty, cheese & special sauce</p>
-                <span class="price">৳650</span>
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=500" alt="Pizza">
-                <h3>BBQ Chicken Pizza</h3>
-                <p>Smoky BBQ chicken & soft crust</p>
-                <span class="price">৳1200</span>
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=500" alt="Wings">
-                <h3>Spicy Wings (6 pcs)</h3>
-                <p>Crispy wings with spicy sauce</p>
-                <span class="price">৳700</span>
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1544787210-2827448b373c?q=80&w=500" alt="Latte">
-                <h3>Iced Caramel Latte</h3>
-                <p>Fresh coffee with caramel</p>
-                <span class="price">৳300</span>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" style="background:var(--card-bg);">
-        <h2 style="color:var(--primary-gold);">Contact Us</h2>
-        <p>📍 Kaliganj, Gazipur, Dhaka</p>
-        <p>📞 Phone: 01402-256081</p>
-        <p>💬 WhatsApp: 01736-671858</p>
-    </section>
-
-    <div id="chat-trigger" onclick="toggleChat()">🤖</div>
-
-    <div id="chat-widget">
-        <div id="chat-header"><span>Assistant</span><span onclick="toggleChat()" style="cursor:pointer">✖</span></div>
-        <div id="chat-body">
-            <div class="bot-msg">Hello! Welcome. How can I help you?</div>
-            <button onclick="selectFlow('food')" style="padding:5px; margin-top:5px; border:1px solid gold; border-radius:5px; cursor:pointer;">Order Food</button>
-            <button onclick="selectFlow('design')" style="padding:5px; margin-top:5px; border:1px solid gold; border-radius:5px; cursor:pointer;">Design Service</button>
-        </div>
-        <div id="chat-input-container">
-            <input type="text" id="chat-input" placeholder="Type..." style="flex:1; border:none; outline:none;">
-            <button onclick="handleMsg()">➡️</button>
-        </div>
+    <div id="start-screen">
+        <h1 style="color:#d4af37">BURGER STACK</h1>
+        <p>একটির ওপর আরেকটি বার্গার স্লাইস সাজান! ব্যালেন্স হারালেই গেম শেষ।</p>
+        <button onclick="startGame()">PLAY NOW</button>
     </div>
+
+    <canvas id="gameCanvas"></canvas>
 
     <script>
-        const chatWidget = document.getElementById('chat-widget');
-        const chatBody = document.getElementById('chat-body');
-        let currentStep = '';
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const startScreen = document.getElementById('start-screen');
 
-        function toggleChat() { chatWidget.style.display = (chatWidget.style.display === 'flex') ? 'none' : 'flex'; }
-        
-        function addMsg(text, sender) {
-            const div = document.createElement('div');
-            div.className = sender === 'bot' ? 'bot-msg' : 'user-msg';
-            div.innerText = text;
-            chatBody.appendChild(div);
-            chatBody.scrollTop = chatBody.scrollHeight;
+        canvas.width = window.innerWidth > 400 ? 400 : window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let score = 0;
+        let gameActive = false;
+        let boxes = [];
+        let speed = 2;
+        let currentBox = { x: 0, y: 0, w: 150, h: 30, color: '#d4af37', dir: 1 };
+
+        function startGame() {
+            score = 0;
+            speed = 3;
+            gameActive = true;
+            startScreen.style.display = 'none';
+            boxes = [{ x: (canvas.width - 150) / 2, y: canvas.height - 50, w: 150, h: 30, color: '#8b4513' }]; // Base
+            newBox();
+            animate();
         }
 
-        function selectFlow(flow) {
-            if(flow === 'food') {
-                currentStep = 'food_order';
-                addMsg("I want to order Food", "user");
-                addMsg("What would you like? (Burger, Pizza, etc.)", "bot");
-            } else {
-                currentStep = 'design_order';
-                addMsg("Interested in Design", "user");
-                addMsg("Logo, Poster, or Social Media? Please specify.", "bot");
-            }
+        function newBox() {
+            const lastBox = boxes[boxes.length - 1];
+            currentBox = {
+                x: 0,
+                y: lastBox.y - 30,
+                w: lastBox.w,
+                h: 30,
+                color: score % 2 === 0 ? '#d4af37' : '#ffa500',
+                dir: 1
+            };
         }
 
-        function handleMsg() {
-            const input = document.getElementById('chat-input');
-            if(!input.value) return;
-            addMsg(input.value, "user");
+        window.onclick = () => {
+            if (!gameActive) return;
+
+            const lastBox = boxes[boxes.length - 1];
             
-            if(currentStep === 'food_order' || currentStep === 'design_order') {
-                addMsg("Please provide your Name and Contact Number.", "bot");
-                currentStep = 'contact';
-            } else if(currentStep === 'contact') {
-                addMsg("Thank you! We will contact you shortly to confirm.", "bot");
-                currentStep = '';
+            // Checking if stack is aligned
+            if (currentBox.x + currentBox.w < lastBox.x || currentBox.x > lastBox.x + lastBox.w) {
+                gameOver();
+                return;
             }
-            input.value = '';
+
+            // Slice the box (Simple version: just snap to stack)
+            currentBox.x = Math.max(lastBox.x, Math.min(currentBox.x, lastBox.x)); 
+            
+            boxes.push({ ...currentBox });
+            score++;
+            scoreEl.innerText = score;
+            speed += 0.1;
+
+            if (boxes.length > 5) {
+                boxes.forEach(b => b.y += 30);
+            }
+            newBox();
+        };
+
+        function gameOver() {
+            gameActive = false;
+            alert("Game Over! Your Score: " + score);
+            location.reload();
+        }
+
+        function animate() {
+            if (!gameActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw stack
+            boxes.forEach(box => {
+                ctx.fillStyle = box.color;
+                ctx.fillRect(box.x, box.y, box.w, box.h);
+                ctx.strokeStyle = '#111';
+                ctx.strokeRect(box.x, box.y, box.w, box.h);
+            });
+
+            // Move current box
+            currentBox.x += speed * currentBox.dir;
+            if (currentBox.x + currentBox.w > canvas.width || currentBox.x < 0) {
+                currentBox.dir *= -1;
+            }
+
+            ctx.fillStyle = currentBox.color;
+            ctx.fillRect(currentBox.x, currentBox.y, currentBox.w, currentBox.h);
+
+            requestAnimationFrame(animate);
         }
     </script>
 </body>
