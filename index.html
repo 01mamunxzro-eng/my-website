@@ -1,128 +1,190 @@
-<!DOCTYPE html>
+                <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Velocity: Luxury Racing - Isaac Designer</title>
+    <title>Fruit Ninja: Falling Edition - Isaac Pro</title>
     <style>
-        :root { --gold: #d4af37; --black: #0a0a0a; --red: #ff4d4d; }
-        body { margin: 0; background: var(--black); color: white; font-family: 'Arial', sans-serif; overflow: hidden; touch-action: none; }
-        canvas { display: block; background: #111; margin: 0 auto; box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
-        #ui { position: absolute; top: 15px; width: 100%; text-align: center; pointer-events: none; }
-        .score-board { font-size: 28px; font-weight: bold; color: var(--gold); text-shadow: 0 0 10px var(--gold); }
-        #start-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; }
-        h1 { color: var(--gold); font-size: 45px; margin: 0; letter-spacing: 4px; text-shadow: 0 0 20px var(--gold); }
-        button { background: var(--gold); color: black; border: none; padding: 15px 45px; font-size: 22px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 25px; box-shadow: 0 0 25px var(--gold); }
-        .controls { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: space-around; padding: 0 20px; box-sizing: border-box; }
-        .btn { width: 90px; height: 90px; background: rgba(212, 175, 55, 0.2); border: 3px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--gold); user-select: none; }
+        body { margin: 0; background: #0a0a0a; overflow: hidden; font-family: 'Segoe UI', sans-serif; touch-action: none; cursor: crosshair; }
+        canvas { display: block; background: radial-gradient(circle, #222 0%, #000 100%); }
+        #ui { position: absolute; top: 20px; width: 100%; display: flex; justify-content: space-around; color: gold; font-size: 24px; font-weight: bold; pointer-events: none; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); z-index: 5; }
+        #overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; }
+        .award-title { color: gold; font-size: 35px; margin-bottom: 10px; text-shadow: 0 0 20px gold; }
+        .trophy { font-size: 80px; margin: 20px 0; display: none; filter: drop-shadow(0 0 15px gold); }
+        button { background: gold; color: #000; border: none; padding: 15px 40px; font-size: 20px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 0 20px gold; }
     </style>
 </head>
 <body>
 
     <div id="ui">
-        <div class="score-board">SCORE: <span id="scoreVal">0</span></div>
+        <div>Time: <span id="timer">15</span>s</div>
+        <div>Score: <span id="score">0</span></div>
+        <div>Round: <span id="round">1</span></div>
     </div>
 
-    <div id="start-screen">
-        <h1>VELOCITY</h1>
-        <p style="color: #888; margin-top: 10px;">LUXURY RACING EDITION</p>
-        <button onclick="startGame()">START RACE</button>
+    <div id="overlay">
+        <h1 id="status-text" class="award-title">READY TO SLICE?</h1>
+        <div id="trophy" class="trophy">🏆</div>
+        <button id="action-btn" onclick="startCurrentRound()">START ROUND 1</button>
     </div>
 
     <canvas id="gameCanvas"></canvas>
 
-    <div class="controls" id="controls" style="display: none;">
-        <div class="btn" id="lBtn">◀</div>
-        <div class="btn" id="rBtn">▶</div>
-    </div>
-
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const scoreVal = document.getElementById('scoreVal');
-        const startScreen = document.getElementById('start-screen');
-        const controls = document.getElementById('controls');
+        const timerEl = document.getElementById('timer');
+        const scoreEl = document.getElementById('score');
+        const roundEl = document.getElementById('round');
+        const overlay = document.getElementById('overlay');
+        const statusText = document.getElementById('status-text');
+        const trophy = document.getElementById('trophy');
+        const actionBtn = document.getElementById('action-btn');
 
-        canvas.width = Math.min(window.innerWidth, 500);
+        canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        let gameActive = false;
         let score = 0;
-        let speed = 6;
-        let player = { x: canvas.width / 2 - 25, y: canvas.height - 150, w: 50, h: 90 };
-        let enemies = [];
-        let moveDir = 0;
+        let timeLeft = 15;
+        let round = 1;
+        let active = false;
+        let fruits = [];
+        let particles = [];
+        let swordPath = [];
+        
+        // Realistic Sword Sound
+        const sliceSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
 
-        function startGame() {
-            gameActive = true;
-            score = 0;
-            speed = 6;
-            enemies = [];
-            startScreen.style.display = 'none';
-            controls.style.display = 'flex';
-            animate();
-        }
-
-        // Mobile Controls
-        document.getElementById('lBtn').addEventListener('touchstart', (e) => { e.preventDefault(); moveDir = -9; });
-        document.getElementById('rBtn').addEventListener('touchstart', (e) => { e.preventDefault(); moveDir = 9; });
-        document.addEventListener('touchend', () => moveDir = 0);
-
-        function spawnEnemy() {
-            if (Math.random() < 0.025) {
-                let lane = Math.floor(Math.random() * 3);
-                enemies.push({ x: lane * (canvas.width/3) + (canvas.width/6 - 25), y: -100, w: 50, h: 90 });
+        class Fruit {
+            constructor() {
+                this.x = Math.random() * (canvas.width - 60) + 30;
+                this.y = -50;
+                this.r = 30 + Math.random() * 15;
+                this.color = ['#FF3B30', '#FFCC00', '#4CD964', '#FF9500', '#AF52DE'][Math.floor(Math.random()*5)];
+                this.speedY = 3 + Math.random() * (2 + round); // Speed increases with round
+                this.sliced = false;
+            }
+            draw() {
+                if(this.sliced) return;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                // Shine effect
+                ctx.beginPath();
+                ctx.arc(this.x - this.r/3, this.y - this.r/3, this.r/4, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.fill();
             }
         }
 
-        function animate() {
-            if (!gameActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function startCurrentRound() {
+            overlay.style.display = 'none';
+            score = 0;
+            scoreEl.innerText = score;
+            timeLeft = round === 1 ? 15 : (round === 2 ? 20 : 30);
+            timerEl.innerText = timeLeft;
+            active = true;
+            
+            const timerInterval = setInterval(() => {
+                if(!active) { clearInterval(timerInterval); return; }
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if(timeLeft <= 0) endRound();
+            }, 1000);
+            
+            animate();
+        }
 
-            // Draw Road
-            ctx.fillStyle = "#151515";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = "rgba(212, 175, 55, 0.4)";
-            ctx.setLineDash([30, 20]);
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.moveTo(canvas.width/3, 0); ctx.lineTo(canvas.width/3, canvas.height);
-            ctx.moveTo(2*canvas.width/3, 0); ctx.lineTo(2*canvas.width/3, canvas.height);
-            ctx.stroke();
-
-            // Player Car (Gold Style)
-            ctx.fillStyle = "gold";
-            ctx.shadowBlur = 20; ctx.shadowColor = "gold";
-            ctx.fillRect(player.x, player.y, player.w, player.h);
-            ctx.fillStyle = "black"; // Glass
-            ctx.fillRect(player.x + 10, player.y + 15, 30, 20);
-            ctx.shadowBlur = 0;
-
-            player.x += moveDir;
-            if(player.x < 0) player.x = 0;
-            if(player.x > canvas.width - player.w) player.x = canvas.width - player.w;
-
-            // Enemies
-            spawnEnemy();
-            enemies.forEach((en, index) => {
-                en.y += speed;
-                ctx.fillStyle = "#ff4d4d"; // Red enemy cars
-                ctx.fillRect(en.x, en.y, en.w, en.h);
-
-                // Collision
-                if (player.x < en.x + en.w && player.x + player.w > en.x && player.y < en.y + en.h && player.y + player.h > en.y) {
-                    gameActive = false;
-                    alert("CRASHED! FINAL SCORE: " + score);
-                    location.reload();
+        function endRound() {
+            active = false;
+            overlay.style.display = 'flex';
+            const targetScore = round * 12;
+            
+            if(score >= targetScore) {
+                statusText.innerText = "ROUND " + round + " PASSED!";
+                trophy.style.display = 'block';
+                round++;
+                if(round > 3) {
+                    statusText.innerText = "ULTIMATE CHAMPION! 🏆";
+                    actionBtn.innerText = "RESTART GAME";
+                    round = 1;
+                } else {
+                    actionBtn.innerText = "START ROUND " + round;
                 }
+            } else {
+                statusText.innerText = "FAILED! NEED " + targetScore + " POINTS";
+                trophy.style.display = 'none';
+                actionBtn.innerText = "TRY AGAIN";
+            }
+        }
 
-                if(en.y > canvas.height) {
-                    enemies.splice(index, 1);
+        function handleInteraction(x, y) {
+            if(!active) return;
+            
+            // Draw Sword Trail
+            swordPath.push({x, y, age: 0});
+            if(swordPath.length > 10) swordPath.shift();
+
+            fruits.forEach(f => {
+                let d = Math.hypot(x - f.x, y - f.y);
+                if(d < f.r && !f.sliced) {
+                    f.sliced = true;
                     score++;
-                    scoreVal.innerText = score;
-                    if(score % 15 === 0) speed += 0.8; 
+                    scoreEl.innerText = score;
+                    sliceSound.currentTime = 0;
+                    sliceSound.play();
+                    // Splatter particles
+                    for(let i=0; i<12; i++) {
+                        particles.push({
+                            x: f.x, y: f.y,
+                            vx: (Math.random()-0.5)*10,
+                            vy: (Math.random()-0.5)*10,
+                            alpha: 1, color: f.color
+                        });
+                    }
                 }
             });
+        }
+
+        window.addEventListener('mousemove', (e) => handleInteraction(e.clientX, e.clientY));
+        window.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
+        }, {passive: false});
+
+        function animate() {
+            if(!active && particles.length === 0) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Spawn Fruits from Top
+            if(Math.random() < 0.04 + (round * 0.01)) fruits.push(new Fruit());
+
+            fruits.forEach((f, i) => {
+                f.y += f.speedY;
+                f.draw();
+                if(f.y > canvas.height + 50) fruits.splice(i, 1);
+            });
+
+            // Particles update
+            particles.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy; p.alpha -= 0.02;
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, 6, 6);
+                if(p.alpha <= 0) particles.splice(i, 1);
+            });
+            ctx.globalAlpha = 1;
+
+            // Draw Sword Trail
+            if(swordPath.length > 1) {
+                ctx.beginPath();
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+                ctx.lineWidth = 3;
+                ctx.moveTo(swordPath[0].x, swordPath[0].y);
+                for(let i=1; i<swordPath.length; i++) ctx.lineTo(swordPath[i].x, swordPath[i].y);
+                ctx.stroke();
+            }
 
             requestAnimationFrame(animate);
         }
