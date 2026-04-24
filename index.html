@@ -2,121 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burger Stack - Premium Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Isaac Pro Racer - High Speed</title>
     <style>
-        body { margin: 0; background: #111; color: white; font-family: sans-serif; overflow: hidden; text-align: center; }
-        canvas { display: block; background: #1a1a1a; margin: 0 auto; box-shadow: 0 0 20px #d4af37; border-bottom: 5px solid #d4af37; }
-        #ui { position: absolute; top: 20px; width: 100%; pointer-events: none; }
-        .score-box { font-size: 30px; font-weight: bold; color: #d4af37; }
-        #start-screen { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 30px; border: 2px solid #d4af37; border-radius: 15px; width: 80%; max-width: 300px; }
-        button { background: #d4af37; color: black; border: none; padding: 10px 25px; font-size: 18px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        body { margin: 0; background: #000; overflow: hidden; font-family: 'Arial', sans-serif; touch-action: none; }
+        canvas { display: block; background: #111; margin: 0 auto; box-shadow: 0 0 50px gold; }
+        #ui { position: absolute; top: 10px; width: 100%; text-align: center; color: gold; font-size: 24px; font-weight: bold; pointer-events: none; z-index: 5; }
+        #start-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; }
+        h1 { color: gold; font-size: 40px; margin: 0; letter-spacing: 5px; }
+        p { color: white; margin-top: 10px; font-size: 14px; }
+        button { background: gold; color: black; border: none; padding: 15px 50px; font-size: 20px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 20px; box-shadow: 0 0 20px gold; }
+        .controls { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: space-between; padding: 0 30px; box-sizing: border-box; }
+        .btn { width: 100px; height: 100px; background: rgba(255, 215, 0, 0.2); border: 3px solid gold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: gold; -webkit-user-select: none; }
     </style>
 </head>
 <body>
 
-    <div id="ui">
-        <div class="score-box">Score: <span id="score">0</span></div>
-    </div>
+    <div id="ui">Score: <span id="score">0</span></div>
 
     <div id="start-screen">
-        <h1 style="color:#d4af37">BURGER STACK</h1>
-        <p>একটির ওপর আরেকটি বার্গার স্লাইস সাজান! ব্যালেন্স হারালেই গেম শেষ।</p>
-        <button onclick="startGame()">PLAY NOW</button>
+        <h1>ISAAC RACER</h1>
+        <p>অন্য গাড়িগুলো এড়িয়ে সর্বোচ্চ স্কোর করুন!</p>
+        <button onclick="startGame()">START ENGINE</button>
     </div>
 
     <canvas id="gameCanvas"></canvas>
 
+    <div class="controls" id="controls" style="display: none;">
+        <div class="btn" id="leftBtn">◀</div>
+        <div class="btn" id="rightBtn">▶</div>
+    </div>
+
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const scoreEl = document.getElementById('score');
+        const scoreVal = document.getElementById('score');
         const startScreen = document.getElementById('start-screen');
+        const controls = document.getElementById('controls');
 
-        canvas.width = window.innerWidth > 400 ? 400 : window.innerWidth;
+        canvas.width = Math.min(window.innerWidth, 500);
         canvas.height = window.innerHeight;
 
-        let score = 0;
         let gameActive = false;
-        let boxes = [];
-        let speed = 2;
-        let currentBox = { x: 0, y: 0, w: 150, h: 30, color: '#d4af37', dir: 1 };
+        let score = 0;
+        let gameSpeed = 5;
+        let player = { x: canvas.width / 2 - 25, y: canvas.height - 150, w: 50, h: 90 };
+        let enemies = [];
+        let moveDir = 0;
 
         function startGame() {
-            score = 0;
-            speed = 3;
             gameActive = true;
+            score = 0;
+            gameSpeed = 5;
+            enemies = [];
             startScreen.style.display = 'none';
-            boxes = [{ x: (canvas.width - 150) / 2, y: canvas.height - 50, w: 150, h: 30, color: '#8b4513' }]; // Base
-            newBox();
-            animate();
+            controls.style.display = 'flex';
+            requestAnimationFrame(update);
         }
 
-        function newBox() {
-            const lastBox = boxes[boxes.length - 1];
-            currentBox = {
-                x: 0,
-                y: lastBox.y - 30,
-                w: lastBox.w,
-                h: 30,
-                color: score % 2 === 0 ? '#d4af37' : '#ffa500',
-                dir: 1
-            };
-        }
+        // Controls Logic
+        document.getElementById('leftBtn').addEventListener('touchstart', () => moveDir = -8);
+        document.getElementById('rightBtn').addEventListener('touchstart', () => moveDir = 8);
+        document.getElementById('leftBtn').addEventListener('touchend', () => moveDir = 0);
+        document.getElementById('rightBtn').addEventListener('touchend', () => moveDir = 0);
 
-        window.onclick = () => {
-            if (!gameActive) return;
-
-            const lastBox = boxes[boxes.length - 1];
-            
-            // Checking if stack is aligned
-            if (currentBox.x + currentBox.w < lastBox.x || currentBox.x > lastBox.x + lastBox.w) {
-                gameOver();
-                return;
-            }
-
-            // Slice the box (Simple version: just snap to stack)
-            currentBox.x = Math.max(lastBox.x, Math.min(currentBox.x, lastBox.x)); 
-            
-            boxes.push({ ...currentBox });
-            score++;
-            scoreEl.innerText = score;
-            speed += 0.1;
-
-            if (boxes.length > 5) {
-                boxes.forEach(b => b.y += 30);
-            }
-            newBox();
+        // PC Controls
+        window.onkeydown = (e) => {
+            if(e.key === "ArrowLeft") moveDir = -8;
+            if(e.key === "ArrowRight") moveDir = 8;
         };
+        window.onkeyup = () => moveDir = 0;
 
-        function gameOver() {
-            gameActive = false;
-            alert("Game Over! Your Score: " + score);
-            location.reload();
+        function spawnEnemy() {
+            if (Math.random() < 0.02) {
+                let laneWidth = canvas.width / 3;
+                let lane = Math.floor(Math.random() * 3);
+                enemies.push({ x: lane * laneWidth + (laneWidth/2 - 25), y: -100, w: 50, h: 90 });
+            }
         }
 
-        function animate() {
+        function update() {
             if (!gameActive) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw stack
-            boxes.forEach(box => {
-                ctx.fillStyle = box.color;
-                ctx.fillRect(box.x, box.y, box.w, box.h);
-                ctx.strokeStyle = '#111';
-                ctx.strokeRect(box.x, box.y, box.w, box.h);
+            // Draw Road
+            ctx.fillStyle = "#222";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = "gold";
+            ctx.setLineDash([40, 20]);
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 3, 0); ctx.lineTo(canvas.width / 3, canvas.height);
+            ctx.moveTo(2 * canvas.width / 3, 0); ctx.lineTo(2 * canvas.width / 3, canvas.height);
+            ctx.stroke();
+
+            // Player Car (Isaac Special)
+            ctx.fillStyle = "gold";
+            ctx.shadowBlur = 20; ctx.shadowColor = "gold";
+            ctx.fillRect(player.x, player.y, player.w, player.h);
+            ctx.fillStyle = "black"; // Windshield
+            ctx.fillRect(player.x + 10, player.y + 15, 30, 20);
+            ctx.shadowBlur = 0;
+
+            player.x += moveDir;
+            if(player.x < 0) player.x = 0;
+            if(player.x > canvas.width - player.w) player.x = canvas.width - player.w;
+
+            // Enemies
+            spawnEnemy();
+            enemies.forEach((en, index) => {
+                en.y += gameSpeed;
+                ctx.fillStyle = "#ff4d4d"; // Red enemy cars
+                ctx.fillRect(en.x, en.y, en.w, en.h);
+
+                // Collision Check
+                if (player.x < en.x + en.w && player.x + player.w > en.x && player.y < en.y + en.h && player.y + player.h > en.y) {
+                    gameOver();
+                }
+
+                if(en.y > canvas.height) {
+                    enemies.splice(index, 1);
+                    score++;
+                    scoreVal.innerText = score;
+                    if(score % 10 === 0) gameSpeed += 0.5; // গতি বাড়ানো
+                }
             });
 
-            // Move current box
-            currentBox.x += speed * currentBox.dir;
-            if (currentBox.x + currentBox.w > canvas.width || currentBox.x < 0) {
-                currentBox.dir *= -1;
-            }
+            requestAnimationFrame(update);
+        }
 
-            ctx.fillStyle = currentBox.color;
-            ctx.fillRect(currentBox.x, currentBox.y, currentBox.w, currentBox.h);
-
-            requestAnimationFrame(animate);
+        function gameOver() {
+            gameActive = false;
+            alert("💥 CRASHED! 💥\nYour Final Score: " + score);
+            location.reload();
         }
     </script>
 </body>
