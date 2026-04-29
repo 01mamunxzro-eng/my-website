@@ -1,211 +1,326 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Feast | Premium AI Restaurant</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <title>FoodRush - Premium Food Delivery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            margin: 0;
-            font-family: 'Montserrat', sans-serif;
-            background-color: #fcfaf5;
-            color: #333;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('https://i.ibb.co/LzdYp0f/restaurant-image.jpg'); /* এখানে আপনার দেওয়া ছবিটির লিংক বসবে */
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            padding: 12px 30px;
-            background-color: #d4af37; /* Gold color */
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #b8962e;
-        }
-
-        /* Menu Section */
-        .menu-section {
-            padding: 80px 10%;
-            text-align: center;
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .menu-item {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-
-        .menu-item:hover {
-            transform: translateY(-10px);
-        }
-
-        .menu-item img {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        .price {
-            color: #d4af37;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        /* AI Chatbot UI */
-        #ai-assistant {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 300px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 1000;
-        }
-
-        .chat-header {
-            background: #d4af37;
-            color: white;
-            padding: 15px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .chat-box {
-            height: 300px;
-            padding: 15px;
-            overflow-y: auto;
-            font-size: 0.9rem;
-        }
-
-        .chat-input {
-            border: none;
-            border-top: 1px solid #eee;
-            padding: 15px;
-            outline: none;
-        }
-
-        .ai-toggle {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #d4af37;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .hero-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .search-focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .ai-chatbot { transition: all 0.3s ease; }
+        .ai-chatbot:hover { transform: scale(1.05); }
+        .chat-messages { max-height: 400px; scroll-behavior: smooth; }
     </style>
 </head>
-<body>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-utensils text-3xl text-orange-500"></i>
+                    <span class="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+                        FoodRush
+                    </span>
+                </div>
 
-    <section class="hero">
-        <h1>Grand Feast</h1>
-        <p>একটি আধুনিক এআই চালিত ডাইনিং অভিজ্ঞতা</p>
-        <a href="#menu" class="btn">মেনু দেখুন</a>
-    </section>
+                <!-- Search Bar -->
+                <div class="flex-1 max-w-2xl mx-8">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="searchInput"
+                            placeholder="Search for pizza, burgers, desserts..." 
+                            class="w-full pl-12 pr-12 py-4 rounded-full text-lg border-2 border-gray-200 focus:outline-none focus:border-orange-500 search-focus transition-all duration-300 shadow-lg"
+                        >
+                        <button id="searchBtn" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-orange-500 hover:text-orange-600">
+                            <i class="fas fa-search text-xl"></i>
+                        </button>
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
 
-    <section id="menu" class="menu-section">
-        <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem;">আমাদের সিগনেচার ডিশ</h2>
-        <div class="menu-grid">
-            <div class="menu-item">
-                <img src="https://via.placeholder.com/200" alt="Food">
-                <h3>রয়্যাল বিরিয়ানি</h3>
-                <p>সবচেয়ে সুস্বাদু বাসমতি চাল ও খাসির মাংসের মিশ্রণ।</p>
-                <p class="price">৳৮৫০</p>
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Google Sign-In -->
+                    <div id="g_id_onload"></div>
+                    <div class="g_id_signin hidden" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
+                    <button id="signInBtn" class="flex items-center space-x-2 px-4 py-2 bg-white border-2 border-gray-300 rounded-full hover:shadow-md transition-all duration-300">
+                        <i class="fab fa-google text-red-500"></i>
+                        <span>Sign In</span>
+                    </button>
+                    
+                    <!-- Cart -->
+                    <button class="relative p-3 bg-orange-100 hover:bg-orange-200 rounded-full transition-all duration-300">
+                        <i class="fas fa-shopping-cart text-2xl text-orange-600"></i>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center text-sm">3</span>
+                    </button>
+                </div>
             </div>
-            <div class="menu-item">
-                <img src="https://via.placeholder.com/200" alt="Food">
-                <h3>গ্রিলড চিকেন প্ল্যাটর</h3>
-                <p>শেফ স্পেশাল মশলায় তৈরি করা স্মোকি চিকেন।</p>
-                <p class="price">৳৬৫০</p>
-            </div>
-            <div class="menu-item">
-                <img src="https://via.placeholder.com/200" alt="Food">
-                <h3>সিফিশ প্ল্যাটার</h3>
-                <p>তাজা সামুদ্রিক মাছের ফ্রাই এবং সস।</p>
-                <p class="price">৳১২০০</p>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
+                Delicious Food Delivered
+                <span class="block text-orange-300 mt-4">Hot & Fresh</span>
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">Order from your favorite restaurants. Fast delivery to your door.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-2xl mx-auto">
+                <input type="text" placeholder="Enter your location..." class="flex-1 px-6 py-4 rounded-full text-lg focus:outline-none focus:ring-4 focus:ring-white/30">
+                <button class="px-12 py-4 bg-orange-500 hover:bg-orange-600 rounded-full text-xl font-semibold shadow-2xl hover:shadow-orange-500/25 transition-all duration-300">
+                    Find Food
+                </button>
             </div>
         </div>
     </section>
 
-    <!-- AI Assistant -->
-    <div id="ai-assistant">
-        <div class="chat-header">Grand Feast AI Assistant</div>
-        <div class="chat-box" id="chat-box">
-            <p><strong>AI:</strong> আসসালামু আলাইকুম! আমি গ্র্যান্ড ফিস্ট এআই। আপনি আজ রাতে কি খেতে পছন্দ করবেন? অথবা কোনো ডিশ সম্পর্কে জানতে চান?</p>
+    <!-- Categories Grid -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">Popular Categories</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="group cursor-pointer p-8 rounded-3xl bg-gradient-to-br from-orange-400 to-red-500 text-white text-center hover:scale-105 transition-all duration-300 shadow-xl">
+                    <i class="fas fa-pizza-slice text-5xl mb-4 group-hover:rotate-12 transition-transform"></i>
+                    <h3 class="text-2xl font-bold mb-2">Pizza</h3>
+                    <p class="opacity-90">Fresh & Cheesy</p>
+                </div>
+                <div class="group cursor-pointer p-8 rounded-3xl bg-gradient-to-br from-green-400 to-emerald-500 text-white text-center hover:scale-105 transition-all duration-300 shadow-xl">
+                    <i class="fas fa-drumstick-bite text-5xl mb-4 group-hover:rotate-12 transition-transform"></i>
+                    <h3 class="text-2xl font-bold mb-2">Chicken</h3>
+                    <p class="opacity-90">Fried & Grilled</p>
+                </div>
+                <div class="group cursor-pointer p-8 rounded-3xl bg-gradient-to-br from-purple-400 to-pink-500 text-white text-center hover:scale-105 transition-all duration-300 shadow-xl">
+                    <i class="fas fa-ice-cream text-5xl mb-4 group-hover:rotate-12 transition-transform"></i>
+                    <h3 class="text-2xl font-bold mb-2">Desserts</h3>
+                    <p class="opacity-90">Sweet Treats</p>
+                </div>
+                <div class="group cursor-pointer p-8 rounded-3xl bg-gradient-to-br from-yellow-400 to-orange-500 text-white text-center hover:scale-105 transition-all duration-300 shadow-xl">
+                    <i class="fas fa-burger text-5xl mb-4 group-hover:rotate-12 transition-transform"></i>
+                    <h3 class="text-2xl font-bold mb-2">Burgers</h3>
+                    <p class="opacity-90">Juicy & Fresh</p>
+                </div>
+            </div>
         </div>
-        <input type="text" class="chat-input" id="user-input" placeholder="আপনার প্রশ্নটি লিখুন...">
+    </section>
+
+    <!-- Featured Deals -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">🔥 Featured Deals</h2>
+            <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Food cards will be populated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chatbot -->
+    <div id="aiChatbot" class="fixed bottom-6 right-6 w-80 bg-white rounded-3xl shadow-2xl border border-gray-200 hidden ai-chatbot z-50">
+        <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-robot text-white text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-900">FoodRush AI Assistant</h3>
+                    <span class="text-sm text-green-500 flex items-center">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-ping mr-1"></div>
+                        Online
+                    </span>
+                </div>
+            </div>
+            <button id="closeChat" class="text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="chatMessages" class="chat-messages p-6 space-y-4 overflow-y-auto max-h-96">
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-2xl rounded-tr-none max-w-xs">
+                Hi! I'm here to help you with food recommendations, ingredients, delivery info, and more. What can I assist you with? 🍕
+            </div>
+        </div>
+        <div class="p-6 border-t border-gray-200">
+            <div class="flex space-x-3">
+                <input 
+                    id="chatInput" 
+                    type="text" 
+                    placeholder="Ask me anything..." 
+                    class="flex-1 px-4 py-3 rounded-2xl border-2 border-gray-200 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                >
+                <button id="sendMessage" class="p-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-2xl transition-all duration-300">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="ai-toggle" onclick="toggleChat()">এআই অ্যাসিস্ট্যান্ট এর সাথে কথা বলুন</div>
+    <!-- Floating AI Chat Button -->
+    <button id="aiToggle" class="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-3xl shadow-2xl flex items-center justify-center text-2xl ai-chatbot z-40">
+        <i class="fas fa-robot"></i>
+    </button>
 
     <script>
-        function toggleChat() {
-            var chat = document.getElementById("ai-assistant");
-            chat.style.display = (chat.style.display === "flex") ? "none" : "flex";
+        // Sample food data
+        const foodItems = [
+            { id: 1, name: "Margherita Pizza", category: "Pizza", image: "🍕", price: 12.99, variants: ["Small $12.99", "Medium $16.99", "Large $19.99"] },
+            { id: 2, name: "Chicken Biryani", category: "Rice", image: "🍛", price: 14.99, variants: ["Half $14.99", "Full $24.99"] },
+            { id: 3, name: "Chocolate Lava Cake", category: "Dessert", image: "🍫", price: 6.99, variants: ["Single $6.99", "Double $11.99"] },
+            { id: 4, name: "Beef Burger", category: "Burger", image: "🍔", price: 9.99, variants: ["Classic $9.99", "Cheese $11.99", "Bacon $13.99"] },
+            { id: 5, name: "Grilled Chicken", category: "Main", image: "🍗", price: 15.99, variants: ["Half $15.99", "Full $25.99"] },
+            { id: 6, name: "Tiramisu", category: "Dessert", image: "☕", price: 7.99, variants: ["Small $7.99", "Large $12.99"] },
+            { id: 7, name: "Pepperoni Pizza", category: "Pizza", image: "🍕", price: 14.99, variants: ["Medium $14.99", "Large $21.99"] },
+            { id: 8, name: "Veggie Wrap", category: "Healthy", image: "🥬", price: 8.99, variants: ["Regular $8.99", "Large $11.99"] }
+        ];
+
+        // Search functionality
+        document.getElementById('searchBtn').addEventListener('click', performSearch);
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const results = foodItems.filter(item => 
+                item.name.toLowerCase().includes(query) || 
+                item.category.toLowerCase().includes(query)
+            );
+            displayFoodCards(results.length ? results : foodItems.slice(0, 8));
         }
 
-        const input = document.getElementById('user-input');
-        const chatBox = document.getElementById('chat-box');
+        function displayFoodCards(items) {
+            const container = document.getElementById('searchResults');
+            container.innerHTML = items.map(item => `
+                <div class="bg-white rounded-3xl overflow-hidden shadow-xl card-hover cursor-pointer group">
+                    <div class="h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-6xl">${item.image}</span>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex items-center text-sm bg-orange-100 px-3 py-1 rounded-full w-fit mb-4">
+                            <i class="fas fa-tag text-orange-600 mr-2"></i>
+                            ${item.category}
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors">${item.name}</h3>
+                        <div class="space-y-2 mb-6">
+                            ${item.variants.slice(0, 2).map(variant => `
+                                <div class="flex justify-between text-sm text-gray-600">
+                                    <span>${variant}</span>
+                                    <span class="font-semibold text-orange-600">${variant.match(/\$[\d.]+/)[0]}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-4 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-        input.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                let userText = input.value;
-                chatBox.innerHTML += `<p><strong>আপনি:</strong> ${userText}</p>`;
-                input.value = '';
+        // Initial load
+        displayFoodCards(foodItems.slice(0, 8));
 
-                // Simulated AI Logic
-                setTimeout(() => {
-                    let aiResponse = "চমৎকার পছন্দ! আমাদের রয়্যাল বিরিয়ানি আজ বেশ জনপ্রিয়। আপনি কি অর্ডার করতে চান?";
-                    if(userText.includes("অর্ডার")) aiResponse = "অবশ্যই! আপনার ফোন নাম্বারটি দিন, আমরা যোগাযোগ করছি।";
-                    chatBox.innerHTML += `<p><strong>AI:</strong> ${aiResponse}</p>`;
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                }, 1000);
+        // Google Sign-In Simulation
+        document.getElementById('signInBtn').addEventListener('click', () => {
+            // Simulate Google Sign-In popup
+            const accounts = ['john.doe@gmail.com', 'jane.smith@gmail.com', 'user123@gmail.com'];
+            const selected = prompt('Select your Google account:\n' + accounts.join('\n'));
+            if (selected && accounts.includes(selected)) {
+                document.getElementById('signInBtn').innerHTML = `
+                    <i class="fas fa-user-circle text-green-500"></i>
+                    <span>Welcome, ${selected.split('@')[0]}!</span>
+                `;
+                document.getElementById('signInBtn').classList.add('bg-green-100', 'border-green-300');
             }
+        });
+
+        // AI Chatbot
+        const aiChatbot = document.getElementById('aiChatbot');
+        const aiToggle = document.getElementById('aiToggle');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendMessage = document.getElementById('sendMessage');
+        const closeChat = document.getElementById('closeChat');
+
+        aiToggle.addEventListener('click', () => {
+            aiChatbot.classList.toggle('hidden');
+        });
+
+        closeChat.addEventListener('click', () => {
+            aiChatbot.classList.add('hidden');
+        });
+
+        sendMessage.addEventListener('click', sendChatMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+
+        function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            chatMessages.innerHTML += `
+                <div class="flex justify-end">
+                    <div class="bg-gray-900 text-white p-4 rounded-2xl rounded-tl-none max-w-xs">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            chatInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Simulate AI response
+            setTimeout(() => {
+                const responses = {
+                    'pizza': "🍕 Our pizzas are made with fresh dough, premium mozzarella, and authentic Italian sauce. Most popular: Margherita & Pepperoni!",
+                    'burger': "🍔 Juicy beef patties with fresh veggies. Try our Classic Burger or upgrade with cheese & bacon!",
+                    'dessert': "🍰 Indulge in our Chocolate Lava Cake or creamy Tiramisu. Perfect ending to your meal!",
+                    'delivery': "🚀 Lightning fast delivery! Average 25-35 mins. Free delivery on orders over $20.",
+                    'ingredients': "All our food uses fresh, high-quality ingredients. We clearly label allergens on every menu item.",
+                    'default': "I can help you with food recommendations, ingredients, delivery times, and order tracking! What would you like to know? 😊"
+                };
+
+                let response = responses.default;
+                for (let key in responses) {
+                    if (message.toLowerCase().includes(key)) {
+                        response = responses[key];
+                        break;
+                    }
+                }
+
+                chatMessages.innerHTML += `
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-2xl rounded-tr-none max-w-xs">
+                        ${response}
+                    </div>
+                `;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+        }
+
+        // Animate on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.card-hover, .group').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
         });
     </script>
 </body>
